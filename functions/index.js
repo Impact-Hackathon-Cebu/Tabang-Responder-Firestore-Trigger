@@ -4,13 +4,7 @@ const admin = require('firebase-admin');
 const db = admin.firestore();
 admin.initializeApp(functions.config().firebase);
 
-    exports.receiveReports = functions.https.onRequest(async (req, res) => {
-        console.log("req object: ", req)
-        console.log("req METHOD: ", req.method)
-        console.log("data: ", req.params)
-        console.log("req: ", req.body)
-
-        
+    exports.receiveReports = functions.https.onRequest(async (req, res) => { 
         db.collection('reports')
         .add({
             desc: req.body.text,
@@ -19,10 +13,8 @@ admin.initializeApp(functions.config().firebase);
             time: req.body.time
         })
         .then(response => {
-            console.log("response: ", response)
             const document_ref = response.path
             const document_id = response.id
-            console.log("document ref: ", response.path)
             db.collection('/hospitals/Ffv7QjIh6VbiLiYTl8An/reports').doc(document_id)
             .set({
                 reportReference: document_ref,
